@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Layer, Rect, Text } from 'react-konva';
 import Mountains from './mountains';
 import Sun from './sun';
-import Ground from './ground';
+import Ground from './ground/ground';
+import HorizonalGridLines from './ground/hlines';
 
 export default function MainScreen({ screenWidth, screenHeight }) {
     return (
@@ -16,8 +17,9 @@ export default function MainScreen({ screenWidth, screenHeight }) {
                 fillLinearGradientColorStops={[0, '#311854', 1, 'black']}
                 />
             {false && <Mountains screenHeight={screenHeight} screenWidth={screenWidth } />}
-            <Sun screenHeight={screenHeight} screenWidth={screenWidth } />
+            <Sun screenHeight={screenHeight} screenWidth={screenWidth }  />
             <Ground screenHeight={screenHeight} screenWidth={screenWidth} />
+            <Mountains screenHeight={screenHeight} screenWidth={screenWidth} />
         </Layer>
     );
 }
