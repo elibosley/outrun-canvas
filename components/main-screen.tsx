@@ -3,6 +3,7 @@ import { Layer, Rect, Text } from 'react-konva';
 import Mountains from './mountains';
 import Sun from './sun';
 import Ground from './ground/ground';
+import Car from './car'
 import HorizonalGridLines from './ground/hlines';
 
 export default function MainScreen({ screenWidth, screenHeight }) {
@@ -20,6 +21,7 @@ export default function MainScreen({ screenWidth, screenHeight }) {
             <Sun screenHeight={screenHeight} screenWidth={screenWidth }  />
             <Ground screenHeight={screenHeight} screenWidth={screenWidth} />
             <Mountains screenHeight={screenHeight} screenWidth={screenWidth} />
+            <Car screenHeight={screenHeight} screenWidth={screenWidth} />
         </Layer>
     );
 }
