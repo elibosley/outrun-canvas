@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Layer, Rect, Text } from 'react-konva';
 import Mountains from './mountains';
 import Sun from './sun';
 import Ground from './ground/ground';
 import Car from './car'
 import HorizonalGridLines from './ground/hlines';
+import { Layer as LayerType } from 'konva/types/Layer';
 
 export default function MainScreen({ screenWidth, screenHeight }) {
+
     return (
         <Layer>
             <Rect x={0}

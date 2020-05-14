@@ -29,8 +29,6 @@ export default function VerticalGridLines({ screenWidth, screenHeight, x, y }) {
         for (let i = 1; i <= lines; i++) {
             points.push([
                 i * hSpacing, y,
-                i * hSpacing + thickness, y,
-                i * hSpacing - (screenWidth / 10) + thickness, screenHeight,
                 i * hSpacing - (screenWidth / 10), screenHeight
             ])
         }
@@ -38,8 +36,6 @@ export default function VerticalGridLines({ screenWidth, screenHeight, x, y }) {
         for (let i = 1; i <= lines; i++) {
             points.push([
                 screenWidth - i * hSpacing, y,
-                screenWidth - i * hSpacing + thickness, y,
-                screenWidth - i * hSpacing + (screenWidth / 10) + thickness, screenHeight,
                 screenWidth - i * hSpacing + (screenWidth / 10), screenHeight
             ])
         }
@@ -62,7 +58,8 @@ export default function VerticalGridLines({ screenWidth, screenHeight, x, y }) {
                 return (<Line
                     key={`vline_${index}`}
                     points={item}
-                    fill={'#60b5d6'}
+                    stroke={'#60b5d6'}
+                    strokeWidth={2}
                     closed={true}
                 />)
             })}

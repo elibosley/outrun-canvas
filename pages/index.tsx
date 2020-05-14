@@ -3,6 +3,7 @@ import { Layer, Stage } from "react-konva";
 import React, { useEffect, useRef, useState } from 'react'
 import { useStrictMode } from 'react-konva';
 import MainScreen from "../components/main-screen";
+import Player from "../components/player";
 
 useStrictMode(true);
 export default function Index() {
@@ -20,20 +21,22 @@ export default function Index() {
   }, []);
 
   return (
-    <Stage width={innerWidth} height={innerHeight}>
-      <style jsx global>{`
+    <div>
+      <Stage width={innerWidth} height={innerHeight}>
+        <style jsx global>{`
         body {
           margin: 0;
         }
       `}</style>
-      {!terminalClicked && false &&
-      (<Terminal screenWidth={innerWidth} screenHeight={innerHeight} clickHandler={setTerminalClicked}/>)
-      }
-      {!terminalClicked && (
-        <MainScreen screenWidth={innerWidth} screenHeight={innerHeight} />
-      )}
-      
-    </Stage>
+        {!terminalClicked &&
+          (<Terminal screenWidth={innerWidth} screenHeight={innerHeight} clickHandler={setTerminalClicked} />)
+        }
+        {terminalClicked && (
+          <MainScreen screenWidth={innerWidth} screenHeight={innerHeight} />
+        )}
+      </Stage>
+      <Player screenWidth={innerWidth} screenHeight={innerHeight} />
+    </div>
   );
 }
 

@@ -4,9 +4,9 @@ import Konva from 'konva';
 import { Group as GroupType } from 'konva/types/Group';
 
 export default function Sun({ screenWidth, screenHeight }) {
-    
+
     const x = screenWidth / 2
-    
+
     const radius = screenWidth / 8
     const y = (screenHeight / 3) * 2 - (radius * 0.75)
     const sunImage: React.MutableRefObject<GroupType> = useRef();
@@ -27,8 +27,8 @@ export default function Sun({ screenWidth, screenHeight }) {
     return (
         <Group
             ref={sunImage}
-            width={radius * 2 + 10}
-            height={radius * 2 + 10}>
+            width={radius * 4 + 10}
+            height={radius * 4 + 10}>
             <Circle
                 radius={radius}
                 fillLinearGradientStartPoint={{ x: 0, y: -screenHeight / 8 }}
