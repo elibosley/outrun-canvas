@@ -19,7 +19,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
+    <div style={{position: 'relative'}}>
       <Stage width={innerWidth} height={innerHeight}>
         <style jsx global>{`
           body {
@@ -37,7 +37,7 @@ export default function Home() {
           <MainScreen screenWidth={innerWidth} screenHeight={innerHeight} />
         )}
       </Stage>
-      <Player screenWidth={innerWidth} screenHeight={innerHeight} />
+      <Player screenWidth={innerWidth} />
     </div>
   );
 }

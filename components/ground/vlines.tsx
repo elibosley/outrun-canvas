@@ -53,7 +53,6 @@ export default function VerticalGridLines({ screenWidth, screenHeight, x, y }) {
         <Group
             ref={groupRef}
         >
-            {console.log('rendered')}
             {generatedLines.map((item, index) => {
                 return (<Line
                     key={`vline_${index}`}

@@ -6,27 +6,29 @@ import { Image as ImageType } from 'konva/types/shapes/Image';
 export default function Car({ screenWidth, screenHeight }) {
     const imageRef = useRef<ImageType>();
     const pathMaxWidth = screenWidth / 16;
-    const imageWidth = 939 * 0.5;
-    const imageHeight = 666 * 0.5;
-    const y = screenHeight / 3 * 2;
+    const percentageOfScreenMaxSize = Math.min(1280, screenWidth) / 1280 * 0.5
+    const imageWidth = 939 * percentageOfScreenMaxSize;
+    const imageHeight = 666 * percentageOfScreenMaxSize;
+    const y = screenHeight - imageHeight;
+    const [carMoveIncrement, setCarMoveIncrement] = useState(2)
+
     const [x, setX] = useState((screenWidth / 2) - (imageWidth / 2));
     const [addSubtract, setAddSubtract] = useState(2);
     const [image] = useImage('/car.svg');
     const startX = (screenWidth / 2) - (imageWidth / 2);
     const getNewX = () => {
-        if (x > startX + pathMaxWidth && addSubtract === 2) {
-            setAddSubtract(-2);
+        if (x > startX + pathMaxWidth && addSubtract === carMoveIncrement) {
+            setAddSubtract(-carMoveIncrement);
         }
-        else if (x < startX - pathMaxWidth && addSubtract === -2) {
-            setAddSubtract(2);
+        else if (x < startX - pathMaxWidth && addSubtract === -carMoveIncrement) {
+            setAddSubtract(carMoveIncrement);
         }
         setX(x + addSubtract);
-        console.log("x", x, 'startx', startX, 'pathmaxwidth', pathMaxWidth, 'addsub', addSubtract)
     }
     useEffect(() => {
         const timeout = setTimeout(() => {
             requestAnimationFrame(getNewX)
-            imageRef.current.cache();
+            imageRef.current?.cache();
         }, 10)
         return () => clearTimeout(timeout)
     })

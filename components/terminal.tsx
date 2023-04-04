@@ -8,17 +8,13 @@ export default function Terminal({ screenWidth, screenHeight, clickHandler }) {
     const inputRef = React.useRef<LayerType>();
 
     useEffect(() => {
-        if (inputRef && inputRef.current) {
-            console.log(inputRef.current.addEventListener('click', () => {
-                console.log('clicked')
-                clickHandler(true)
-            }))
+        if ( inputRef?.current) {
+           inputRef.current.addEventListener('click', setClicked)
         }
-        return () => inputRef.current.removeEventListener('click');
-    }, [inputRef.current])
+        return () => inputRef.current?.removeEventListener('click');
+    }, [])
 
-    const setClicked = (event) => {
-        console.log(event)
+    const setClicked = () => {
         clickHandler(true)
     }
     return (
@@ -29,6 +25,7 @@ export default function Terminal({ screenWidth, screenHeight, clickHandler }) {
                 height={screenHeight}
                 fill={'black'} />
             <TerminalText
+                
                 width={screenWidth}
                 height={screenHeight}
                 x={20}

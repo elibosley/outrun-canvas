@@ -25,7 +25,6 @@ export default function TerminalText({ width, height, x, y, text }) {
 
     useEffect(() => {
         setCursorPosition(textRef.current.getTextWidth() + getFont(20));
-        console.log('Setting new cursor position')
         textRef.current.cache()
     }, [currentlyTyped, width])
 
