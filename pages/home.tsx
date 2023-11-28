@@ -19,7 +19,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{position: 'relative'}}>
+    <div style={{ position: "relative" }}>
       <Stage width={innerWidth} height={innerHeight}>
         <style jsx global>{`
           body {
@@ -42,13 +42,13 @@ export default function Home() {
   );
 }
 
-export const useWindowEvent = (event, callback) => {
+export const useWindowEvent = (event: string, callback: () => void) => {
   useEffect(() => {
     window.addEventListener(event, callback);
     return () => window.removeEventListener(event, callback);
   }, [event, callback]);
 };
 
-export const useGlobalWindowResize = (callback) => {
+export const useGlobalWindowResize = (callback: () => void) => {
   return useWindowEvent("resize", callback);
 };

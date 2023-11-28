@@ -1,9 +1,16 @@
-import './reset.css'
-import App from 'next/app'
-import { Provider } from 'react-redux'
+import "./reset.css";
+import App from "next/app";
+import { Provider } from "react-redux";
 import dynamic from "next/dynamic";
+import { NextComponentType, NextPage } from "next";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({
+  Component,
+  pageProps,
+}: {
+  Component: NextComponentType;
+  pageProps: NextPage["defaultProps"];
+}) {
   return <Component {...pageProps} />;
 }
 

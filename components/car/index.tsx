@@ -3,8 +3,8 @@ import { Layer, Rect, Text, Line, Group, Circle, Image, Transformer } from 'reac
 import { TABLET } from '../../helpers/types';
 import useImage from 'use-image';
 import { Image as ImageType } from 'konva/types/shapes/Image';
-export default function Car({ screenWidth, screenHeight }) {
-    const imageRef = useRef<ImageType>();
+export default function Car({ screenWidth, screenHeight }: { screenWidth: number, screenHeight: number}) {
+    const imageRef = useRef<ImageType | null>(null);
     const pathMaxWidth = screenWidth / 16;
     const percentageOfScreenMaxSize = Math.min(1280, screenWidth) / 1280 * 0.5
     const imageWidth = 939 * percentageOfScreenMaxSize;
