@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Layer, Rect, Text } from "react-konva";
 import Mountains from "./mountains";
 import Sun from "./sun";
 import Ground from "./ground/ground";
 import Car from "./car";
+import ScrollingText from "./scrolling-text";
+import { Layer as LayerType } from "konva/types/Layer";
 
 export default function MainScreen({
   screenWidth,
@@ -12,8 +14,18 @@ export default function MainScreen({
   screenWidth: number;
   screenHeight: number;
 }) {
+  const layerRef = useRef<LayerType | null>(null);
+  useEffect(() => {
+    if (layerRef.current) {
+      setTimeout(() => {
+        layerRef.current?.addEventListener("click", (click) => {
+          window.open("https://github.com/elibosley", "_blank");
+        });
+      }, 5000);
+    }
+  }, [layerRef]);
   return (
-    <Layer>
+    <Layer ref={layerRef}>
       <Rect
         x={0}
         y={0}
@@ -26,19 +38,7 @@ export default function MainScreen({
       {false && (
         <Mountains screenHeight={screenHeight} screenWidth={screenWidth} />
       )}
-      <Text
-        x={screenWidth * 0.33}
-        y={screenHeight * 0.25}
-        text={"Hi. - Learn more about me here: "}
-        onPointerClick={() => {
-          console.log("clicked");
-          window.location.assign("https://github.com");
-        }}
-        fontSize={20}
-        fontFamily={`'Anonymous Pro', monospace`}
-        fill={"white"}
-        shadowBlur={100}
-      />
+      <ScrollingText screenHeight={screenHeight} screenWidth={screenWidth} />
       <Sun screenHeight={screenHeight} screenWidth={screenWidth} />
       <Ground screenHeight={screenHeight} screenWidth={screenWidth} />
       <Mountains screenHeight={screenHeight} screenWidth={screenWidth} />
