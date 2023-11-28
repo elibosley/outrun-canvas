@@ -1,9 +1,17 @@
-import './reset.css'
-import App from 'next/app'
-import { Provider } from 'react-redux'
+import "./reset.css";
+import App from "next/app";
+import { Provider } from "react-redux";
+import dynamic from "next/dynamic";
+import { NextComponentType, NextPage } from "next";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+function MyApp({
+  Component,
+  pageProps,
+}: {
+  Component: NextComponentType;
+  pageProps: NextPage["defaultProps"];
+}) {
+  return <Component {...pageProps} />;
 }
 
 // Only uncomment this method if you have blocking data requirements for
@@ -18,4 +26,4 @@ function MyApp({ Component, pageProps }) {
 //   return { ...appProps }
 // }
 
-export default MyApp
+export default MyApp;

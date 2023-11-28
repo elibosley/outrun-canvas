@@ -1,40 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import { Layer, Rect, Text } from 'react-konva';
-import { Layer as LayerType } from 'konva/types/Layer'
-import Cursor from './cursor';
-import TerminalText from './terminal-text';
+import React, { useEffect, useState } from "react";
+import { Layer, Rect, Text } from "react-konva";
+import { Layer as LayerType } from "konva/types/Layer";
+import Cursor from "./cursor";
+import TerminalText from "./terminal-text";
 
-export default function Terminal({ screenWidth, screenHeight, clickHandler }) {
-    const inputRef = React.useRef<LayerType>();
+export default function Terminal({
+  screenWidth,
+  screenHeight,
+  clickHandler,
+}: {
+  screenWidth: number;
+  screenHeight: number;
+  clickHandler: (isClicked: boolean) => void;
+}) {
+  const inputRef = React.useRef<LayerType | null>(null);
 
-    useEffect(() => {
-        if (inputRef && inputRef.current) {
-            console.log(inputRef.current.addEventListener('click', () => {
-                console.log('clicked')
-                clickHandler(true)
-            }))
-        }
-        return () => inputRef.current.removeEventListener('click');
-    }, [inputRef.current])
-
-    const setClicked = (event) => {
-        console.log(event)
-        clickHandler(true)
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.addEventListener("click", setClicked);
+      return () => inputRef.current?.removeEventListener("click");
+    } else {
+      return () => {};
     }
-    return (
-        <Layer ref={inputRef}>
-            <Rect x={0}
-                y={0}
-                width={screenWidth}
-                height={screenHeight}
-                fill={'black'} />
-            <TerminalText
-                width={screenWidth}
-                height={screenHeight}
-                x={20}
-                y={screenHeight / 2.1}
-                text={'Press any key to continue . . . . .'}
-            />
-        </Layer >
-    );
+  }, [inputRef.current]);
+
+  const setClicked = () => {
+    clickHandler(true);
+  };
+  return (
+    <Layer ref={inputRef}>
+      <Rect
+        x={0}
+        y={0}
+        width={screenWidth}
+        height={screenHeight}
+        fill={"black"}
+      />
+      <TerminalText
+        width={screenWidth}
+        height={screenHeight}
+        x={20}
+        y={screenHeight / 2.1}
+        text={"Press any key to continue . . . . ."}
+      />
+    </Layer>
+  );
 }
