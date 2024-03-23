@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Layer, Rect, Text, Line, Group, Circle } from "react-konva";
-import Konva from "konva";
-import { Group as GroupType } from "konva/types/Group";
+import React, { useEffect, useRef } from "react";
+import { Line, Group, Circle } from "react-konva";
+import { Group as GroupType } from "konva/lib/Group";
 
 export default function Sun({
   screenWidth,
