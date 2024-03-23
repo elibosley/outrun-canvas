@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Text } from "react-konva";
-import { Text as TextType } from "konva/types/shapes/Text";
+import { Text as TextType } from "konva/lib/shapes/Text";
 
 export default function ScrollingText({
   screenWidth,
