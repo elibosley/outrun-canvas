@@ -14,6 +14,8 @@ export default function Sun({
 
   const radius = screenWidth < 500 ? screenWidth / 3 : screenWidth / 4;
   const y = (screenHeight / 3) * 2 - radius * 0.6;
+
+  const sunRiseFallSpeed = 4000;
   const sunImage: React.MutableRefObject<GroupType | null> = useRef(null);
   useEffect(() => {
     if (sunImage.current) {
@@ -21,7 +23,7 @@ export default function Sun({
     }
     const animation = new Animation((frame) => {
       if (sunImage.current && frame) {
-        sunImage.current.offsetY(Math.sin(frame.time / 1000) * 45);
+        sunImage.current.offsetY(Math.sin(frame.time / sunRiseFallSpeed) * 45);
       }
     });
     animation.start();

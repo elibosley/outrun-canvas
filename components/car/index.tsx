@@ -60,6 +60,8 @@ const Car: React.FC<{
               }
               x = x + carMoveIncrement * addSubtract;
               imageRef.current.offsetX(x);
+              const scale = Math.sin(frame.time / 1000) * 0.1 + 0.9;
+              imageRef.current.scale({x: scale, y: scale});
             }
           }
         }
