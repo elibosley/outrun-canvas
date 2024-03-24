@@ -6,9 +6,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "install-bin": "./scripts/download_canvas.sh",
-    "postinstall": "(yarn run install-bin)"
+    "start": "next start"
   },
   "keywords": [],
   "author": "",
