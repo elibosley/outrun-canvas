@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Layer, Rect, Text } from "react-konva";
-import { Layer as LayerType } from "konva/types/Layer";
+import { Layer as LayerType } from "konva/lib/Layer";
 import Cursor from "./cursor";
 import TerminalText from "./terminal-text";
 
@@ -13,16 +13,18 @@ export default function Terminal({
   screenHeight: number;
   clickHandler: (isClicked: boolean) => void;
 }) {
-  const inputRef = React.useRef<LayerType | null>(null);
+  const inputRef = React.useRef<LayerType>(null);
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputRef?.current) {
       inputRef.current.addEventListener("click", setClicked);
-      return () => inputRef.current?.removeEventListener("click");
-    } else {
-      return () => {};
+      inputRef.current.addEventListener("touchstart", setClicked);
     }
-  }, [inputRef.current]);
+    return () => {
+      inputRef.current?.removeEventListener("click");
+      inputRef.current?.removeEventListener("touchstart");
+    };
+  }, [inputRef]);
 
   const setClicked = () => {
     clickHandler(true);

@@ -1,7 +1,7 @@
 import { Group } from "react-konva";
 import { useState, useRef, useEffect, MutableRefObject } from "react";
 import { Line } from "react-konva";
-import { Group as GroupType } from "konva/types/Group";
+import { Group as GroupType } from "konva/lib/Group";
 import { TABLET } from "../../helpers/types";
 
 export default function VerticalGridLines({

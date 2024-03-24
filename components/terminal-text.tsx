@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Layer, Rect, Text, Group } from "react-konva";
 import Cursor from "./cursor";
-export default function TerminalText({
-  width,
-  height,
-  x,
-  y,
-  text,
-}: {
+const TerminalText: React.FC<{
   width: number;
   height: number;
   x: number;
   y: number;
   text: string;
-}) {
+}> = ({ width, height, x, y, text }) => {
   const [currentlyTyped, setCurrentlyTyped] = useState("");
   const [index, setIndex] = useState(0);
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -63,4 +57,6 @@ export default function TerminalText({
       <Cursor x={cursorPosition} y={y} fontSize={getFont(20)} color={"white"} />
     </Group>
   );
-}
+};
+
+export default TerminalText;
