@@ -31,7 +31,8 @@ const Car: React.FC<{
     }
   };
 
-  const percentageOfScreenMaxSize = (Math.min(1280, screenWidth) / 1280) * 0.5;
+  const percentageOfScreenMaxSize =
+    screenWidth < 500 ? 0.3 : (Math.min(1280, screenWidth) / 1280) * 0.5;
   const imageWidth = 939 * percentageOfScreenMaxSize;
   const imageHeight = 666 * percentageOfScreenMaxSize;
   const y = screenHeight - imageHeight;
@@ -61,7 +62,7 @@ const Car: React.FC<{
               x = x + carMoveIncrement * addSubtract;
               imageRef.current.offsetX(x);
               const scale = Math.sin(frame.time / 1000) * 0.1 + 0.9;
-              imageRef.current.scale({x: scale, y: scale});
+              imageRef.current.scale({ x: scale, y: scale });
             }
           }
         }

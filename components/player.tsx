@@ -20,7 +20,7 @@ export const Player: React.FC = () => {
           <PlayIcon className="w-4 h-4" />
         )}
 
-        {state.playing ? "Pause" : "Play"}
+        {state.playing ? "Pause Music" : "Play Music"}
         {audio}
       </button>
     </div>

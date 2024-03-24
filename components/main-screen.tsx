@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Layer, Rect, Text } from 'react-konva';
-import Mountains from './mountains';
+import {Mountains} from './mountains';
 import Sun from './sun';
 import Ground from './ground/ground';
 import Car from './car'
@@ -25,7 +25,6 @@ export default function MainScreen({ screenWidth, screenHeight } : { screenWidth
 
         <Sun screenHeight={screenHeight} screenWidth={screenWidth} />
         <Ground screenHeight={screenHeight} screenWidth={screenWidth} />
-        <Mountains screenHeight={screenHeight} screenWidth={screenWidth} />
         <Car screenHeight={screenHeight} screenWidth={screenWidth} />
       </Layer>
     );

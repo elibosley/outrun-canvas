@@ -17,6 +17,10 @@ export default function VerticalGridLines({
 }) {
   const groupRef: MutableRefObject<GroupType | null> = useRef(null);
 
+  useEffect(() => {
+    groupRef.current?.cache();
+  }, [groupRef.current]);
+
   const thickness = 3;
 
   let lines: number = 0;
@@ -52,6 +56,8 @@ export default function VerticalGridLines({
         screenHeight,
       ]);
     }
+    // Center Point
+    points.push([screenWidth / 2, y, screenWidth / 2, screenHeight]);
     return points;
   };
 
