@@ -15,9 +15,9 @@ const Car: React.FC<{
     if (screenWidth < 600) {
       return 1;
     } else if (screenWidth < 1000) {
-      return 2;
+      return 1.5;
     } else {
-      return 5;
+      return 1;
     }
   };
 

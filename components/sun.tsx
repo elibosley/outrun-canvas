@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Line, Group, Circle } from "react-konva";
 import { Group as GroupType } from "konva/lib/Group";
+import { Animation } from "konva/lib/Animation";
 
 export default function Sun({
   screenWidth,
@@ -11,14 +12,24 @@ export default function Sun({
 }) {
   const x = screenWidth / 2;
 
-  const radius = screenWidth / 8;
-  const y = (screenHeight / 3) * 2 - radius * 0.75;
+  const radius = screenWidth < 500 ? screenWidth / 3 : screenWidth / 4;
+  const y = (screenHeight / 3) * 2 - radius * 0.6;
   const sunImage: React.MutableRefObject<GroupType | null> = useRef(null);
   useEffect(() => {
-    if (sunImage) {
-      sunImage.current?.cache();
+    if (sunImage.current) {
+      sunImage.current.cache();
     }
-  });
+    const animation = new Animation((frame) => {
+      if (sunImage.current && frame) {
+        sunImage.current.offsetY(Math.sin(frame.time / 1000) * 45);
+      }
+    });
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [sunImage.current]);
 
   const getLineStop = (n: number) => {
     return (radius / 10) * 2 * n;
@@ -28,6 +39,7 @@ export default function Sun({
   const lineWidth = radius / 10;
   const lineXLeft = x - (radius + 10);
   const lineXRight = x + (radius + 10);
+
   return (
     <Group ref={sunImage} width={radius * 4 + 10} height={radius * 4 + 10}>
       <Circle
