@@ -18,20 +18,22 @@ export default function Sun({
   const sunRiseFallSpeed = 4000;
   const sunImage: React.MutableRefObject<GroupType | null> = useRef(null);
   useEffect(() => {
-    if (sunImage.current) {
-      sunImage.current.cache();
-    }
+    if (!sunImage.current) return;
+    
+    sunImage.current.cache();
+    
     const animation = new Animation((frame) => {
       if (sunImage.current && frame) {
         sunImage.current.offsetY(Math.sin(frame.time / sunRiseFallSpeed) * 45);
       }
-    });
+    }, sunImage.current.getLayer());
+    
     animation.start();
 
     return () => {
       animation.stop();
     };
-  }, [sunImage.current]);
+  }, [screenWidth, screenHeight, sunRiseFallSpeed]);
 
   const getLineStop = (n: number) => {
     return (radius / 10) * 2 * n;

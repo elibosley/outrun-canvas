@@ -1,17 +1,35 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Image } from "react-konva";
 import useImage from "use-image";
 import { Image as ImageType } from "konva/lib/shapes/Image";
 import { Animation } from "konva/lib/Animation";
+import Konva from "konva";
 import { CarImage } from "./carImage";
+import { CarTrail } from "./carTrail";
+
+interface CarPosition {
+  x: number;
+  offsetX: number;
+  scale: number;
+  forwardOffset: number; // Track forward movement
+}
+
 const Car: React.FC<{
   screenWidth: number;
   screenHeight: number;
 }> = ({ screenWidth, screenHeight }) => {
   const imageRef = useRef<ImageType>(null);
   const [image] = useImage("/car.svg");
+  
+  // Use refs for animation state to avoid React re-renders
+  const trailHistoryRef = useRef<CarPosition[]>([]);
+  const forwardMovementRef = useRef(0);
+  
+  // State for trail rendering - update less frequently
+  const [positionHistory, setPositionHistory] = useState<CarPosition[]>([]);
+  const [, forceUpdate] = useState(0);
 
-  const getMoveIncrement = (screenWidth: number) => {
+  const getMoveIncrement = useCallback((screenWidth: number) => {
     if (screenWidth < 600) {
       return 1;
     } else if (screenWidth < 1000) {
@@ -19,9 +37,9 @@ const Car: React.FC<{
     } else {
       return 1;
     }
-  };
+  }, []);
 
-  const getPathMaxWidth = (screenWidth: number) => {
+  const getPathMaxWidth = useCallback((screenWidth: number) => {
     if (screenWidth < 600) {
       return Math.trunc(screenWidth / 4);
     } else if (screenWidth < 1000) {
@@ -29,62 +47,115 @@ const Car: React.FC<{
     } else {
       return Math.trunc(screenWidth / 4);
     }
-  };
+  }, []);
 
   const percentageOfScreenMaxSize =
-    screenWidth < 500 ? 0.3 : (Math.min(1280, screenWidth) / 1280) * 0.5;
+    screenWidth < 500 ? 0.2 : (Math.min(1280, screenWidth) / 1280) * 0.25;
   const imageWidth = 939 * percentageOfScreenMaxSize;
   const imageHeight = 666 * percentageOfScreenMaxSize;
-  const y = screenHeight - imageHeight;
+  
+  // Position car 1/3 between ground and bottom of screen
+  // Ground starts at (screenHeight / 3) * 2
+  const groundStartY = (screenHeight / 3) * 2;
+  const bottomY = screenHeight;
+  const carY = groundStartY + (bottomY - groundStartY) * (1/3) - imageHeight;
 
   const startX = screenWidth / 2 - imageWidth / 2;
 
+  // Speed lines configuration - sync with ground movement
+  const maxTrailLength = 6; // Reduced trail length for better performance
+  const trailUpdateInterval = 300; // Increased interval for less frequent updates
+  const groundSpeed = 0.1; // Match ground horizontal lines speed
+  const groundUpdateInterval = 50; // Reduced frequency
+  const lineLength = imageHeight * 1.5;
+
   useEffect(() => {
+    if (!imageRef.current) return;
+
     let x = 0;
     let cumulativeTime = 0;
-    let carMoveIncrement = getMoveIncrement(screenWidth);
-    let pathMaxWidth = getPathMaxWidth(screenWidth);
+    let trailUpdateTime = 0;
+    let forwardUpdateTime = 0;
+    const carMoveIncrement = getMoveIncrement(screenWidth);
+    const pathMaxWidth = getPathMaxWidth(screenWidth);
     let addSubtract: 1 | -1 = 1;
 
     const anim = new Animation(
       (frame) => {
-        if (frame) {
+        if (frame && imageRef.current) {
           cumulativeTime += frame.timeDiff;
+          trailUpdateTime += frame.timeDiff;
+          forwardUpdateTime += frame.timeDiff;
+
+          // Update forward movement less frequently
+          if (forwardUpdateTime > groundUpdateInterval) {
+            forwardUpdateTime = 0;
+            forwardMovementRef.current = (forwardMovementRef.current + groundSpeed) % 2;
+          }
 
           if (cumulativeTime > 10) {
             cumulativeTime = 0;
-            if (imageRef.current) {
-              if (x > pathMaxWidth) {
-                addSubtract = -1;
-              } else if (x < -pathMaxWidth) {
-                addSubtract = 1;
-              }
-              x = x + carMoveIncrement * addSubtract;
-              imageRef.current.offsetX(x);
-              const scale = Math.sin(frame.time / 1000) * 0.1 + 0.9;
-              imageRef.current.scale({ x: scale, y: scale });
+            
+            if (x > pathMaxWidth) {
+              addSubtract = -1;
+            } else if (x < -pathMaxWidth) {
+              addSubtract = 1;
+            }
+            x = x + carMoveIncrement * addSubtract;
+            imageRef.current.offsetX(x);
+            const scale = Math.sin(frame.time / 1000) * 0.1 + 0.9;
+            imageRef.current.scale({ x: scale, y: scale });
+
+            // Update trail positions in ref (no React re-render)
+            if (trailUpdateTime > trailUpdateInterval) {
+              trailUpdateTime = 0;
+              
+              const newPosition = {
+                x: startX,
+                offsetX: x,
+                scale: scale,
+                forwardOffset: forwardMovementRef.current
+              };
+              
+              trailHistoryRef.current = [newPosition, ...trailHistoryRef.current].slice(0, maxTrailLength);
+              
+              // Update React state less frequently for trail rendering
+              setPositionHistory([...trailHistoryRef.current]);
             }
           }
         }
       },
-      [imageRef.current?.getLayer(), screenWidth]
+      imageRef.current.getLayer()
     );
 
     anim.start();
     return () => {
       anim.stop();
     };
-  }, [imageRef.current]);
+  }, [screenWidth, screenHeight, startX, getMoveIncrement, getPathMaxWidth]);
 
   return (
-    <Image
-      x={startX}
-      y={y}
-      image={image}
-      width={imageWidth}
-      height={imageHeight}
-      ref={imageRef}
-    />
+    <>
+      {/* Car trail */}
+      {/* <CarTrail
+        positionHistory={positionHistory}
+        imageWidth={imageWidth}
+        imageHeight={imageHeight}
+        carY={carY}
+        screenHeight={screenHeight}
+        screenWidth={screenWidth}
+      /> */}
+      
+      {/* Main car */}
+      <Image
+        x={startX}
+        y={carY}
+        image={image}
+        width={imageWidth}
+        height={imageHeight}
+        ref={imageRef}
+      />
+    </>
   );
 };
 

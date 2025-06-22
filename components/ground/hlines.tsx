@@ -2,6 +2,7 @@ import { Group } from "react-konva";
 import { useState, useRef, useEffect, MutableRefObject } from "react";
 import { Line } from "react-konva";
 import { Group as GroupType } from "konva/lib/Group";
+import { Animation } from "konva/lib/Animation";
 
 interface IHorizontalGridLinesProps {
   screenWidth: number;
@@ -14,10 +15,7 @@ const HorizonalGridLines: React.FunctionComponent<
   IHorizontalGridLinesProps
 > = ({ screenWidth, screenHeight, x, y }) => {
   const groupRef: MutableRefObject<GroupType | null> = useRef(null);
-  const [currentOffset, setOffset] = useState(0);
-  useEffect(() => {
-    groupRef.current?.cache();
-  }, [currentOffset]);
+
   /**
    * Returns y value given an x value
    * @param x
@@ -38,29 +36,32 @@ const HorizonalGridLines: React.FunctionComponent<
     return points;
   };
 
-  const [generatedLines, setGeneratedLines] = useState(iterativeGenerator());
+  const [generatedLines] = useState(iterativeGenerator());
 
   useEffect(() => {
-    setGeneratedLines(iterativeGenerator());
-  }, [screenWidth, screenHeight]);
+    if (!groupRef.current) return;
 
-  const animateLines = () => {
-    setGeneratedLines(iterativeGenerator(currentOffset));
-    if (currentOffset >= 2) {
-      setOffset(0);
-    } else {
-      setOffset(currentOffset + 0.1);
-    }
-  };
+    const anim = new Animation((frame) => {
+      if (frame && groupRef.current) {
+        // Calculate smooth offset based on time
+        const offset = (frame.time * 0.003) % 2; // Faster smooth continuous animation
+        
+        // Update each line's points directly without React state updates
+        groupRef.current.children.forEach((lineNode, index) => {
+          const line = lineNode as any; // Konva Line
+          const newY = lineFunction(index + offset);
+          line.points([0, newY, screenWidth, newY]);
+        });
+      }
+    }, groupRef.current.getLayer());
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      requestAnimationFrame(animateLines);
-    }, 10);
+    anim.start();
+    
     return () => {
-      clearTimeout(timeout);
+      anim.stop();
     };
-  });
+  }, [screenWidth, screenHeight, y]);
+
   return (
     <Group ref={groupRef}>
       {generatedLines.map((item, index) => {

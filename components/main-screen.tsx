@@ -4,7 +4,6 @@ import {Mountains} from './mountains';
 import Sun from './sun';
 import Ground from './ground/ground';
 import Car from './car'
-import ScrollingText from './scrolling-text/index';
 import CanvasOverlay from './canvas-overlay';
 
 export default function MainScreen({ screenWidth, screenHeight } : { screenWidth: number, screenHeight: number }) {
