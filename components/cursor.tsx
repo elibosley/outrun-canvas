@@ -13,7 +13,7 @@ export default function Cursor({
   color: string;
 }) {
   const [cursorColor, setCursorColor] = useState(color);
-  const rectRef: MutableRefObject<any> = useRef();
+  const rectRef: MutableRefObject<any> = useRef(null);
   const updateCursorColor = () => {
     if (cursorColor === "black") {
       setCursorColor(color);

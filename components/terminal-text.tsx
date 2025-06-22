@@ -11,7 +11,7 @@ const TerminalText: React.FC<{
   const [currentlyTyped, setCurrentlyTyped] = useState("");
   const [index, setIndex] = useState(0);
   const [cursorPosition, setCursorPosition] = useState(0);
-  const textRef: React.MutableRefObject<any> = React.useRef();
+  const textRef: React.MutableRefObject<any> = React.useRef(null);
 
   const typeNextLetter = () => {
     setCurrentlyTyped(`${currentlyTyped}${text[index]}`);
