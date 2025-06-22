@@ -1,62 +1,93 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Layer, Rect, Text, Line, Group } from "react-konva";
+import { Layer, Rect, Text, Line, Group, Shape } from "react-konva";
 import { Group as GroupType } from "konva/lib/Group";
+import { useEffectOnce } from "react-use";
 
 export const Mountains: React.FC<{
   screenWidth: number;
   screenHeight: number;
 }> = ({ screenWidth, screenHeight }) => {
+  const [mountainTops, setMountainTops] = useState<{ x: number; y: number }[]>(
+    []
+  );
   const groupRef = useRef<GroupType>(null);
-  const getRandomMountainHeight = () => {
-    return Math.random() * screenHeight * 0.3;
+
+  // Function to calculate height based on distance from center (outrun style)
+  const calculateHeightFactor = (x: number) => {
+    const centerX = screenWidth / 2;
+    const distanceFromCenter = Math.abs(x - centerX);
+    const maxDistance = screenWidth / 2;
+    
+    // Create a smooth curve that goes to max in the center and 0 at edges
+    // Using a quadratic function for smooth transitions
+    const normalizedDistance = distanceFromCenter / maxDistance;
+    return 1 - Math.pow(normalizedDistance, 1.5); // Inverted: 1 at center, 0 at edges
   };
-
-  // Function to generate random number in a range
-  function randomRange(min: number, max: number) {
-    return Math.random() * (max - min) + min;
-  }
-
-  // Function to generate mountain tops
+   
   function generateMountainTops(numMountains: number, maxHeight: number) {
-            const mountainTops = [];
-            const stepX = screenWidth / numMountains;
-            let prevX = 0;
-            let prevY = Math.random() * maxHeight;
+    const tops = [];
 
-            for (let i = 0; i < numMountains; i++) {
-              const newX = prevX + stepX;
-              const newY = Math.random() * maxHeight;
+    for (let i = 0; i <= numMountains; i++) {
+      const newX = (i / numMountains) * screenWidth;
+      const heightFactor = calculateHeightFactor(newX);
+      
+      // Add some randomness while maintaining the overall outrun shape
+      const randomVariation = 0.8 + Math.random() * 0.4; // Random between 0.8 and 1.2
+      // Invert the height: high mountains at edges (small y), valley at center (large y)
+      const newY = maxHeight * (1 - heightFactor) * randomVariation;
 
-              mountainTops.push({ x: prevX, y: prevY });
+      tops.push({ x: newX, y: newY });
+    }
 
-              // Add zigzag lines
-              for (let j = prevX + stepX / 10; j < newX; j += stepX / 10) {
-                const deltaY = Math.random() * (maxHeight / 4) - maxHeight / 8;
-                mountainTops.push({ x: j, y: prevY + deltaY });
-              }
-
-              prevX = newX;
-              prevY = newY;
-            }
-
-            // Connect to the right edge
-            mountainTops.push({ x: screenWidth, y: prevY });
-
-            return mountainTops;
+    return tops;
   }
 
-  // Generate and draw mountain tops
-  const mountainTops = generateMountainTops(2, 150);
-  // Generate
+  // Initialize mountain tops
+  useEffect(() => {
+    const initialMountainTops = generateMountainTops(20, screenHeight / 3);
+    setMountainTops(initialMountainTops);
+  }, [screenHeight, screenWidth]);
+
+  /* useEffect(() => {
+    const animate = () => {
+      setMountainTops((prevMountainTops) => {
+        return prevMountainTops.map((top) => {
+          return {
+            x:
+              top.x +
+              calculateShorteningFactor(Math.abs(top.x - screenWidth / 2)), // Move horizontally randomly
+            y:
+              top.y +
+              calculateShorteningFactor(Math.abs(top.y - screenWidth / 2)), // Move vertically randomly
+          };
+        });
+      });
+
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }, []);  */
+
   return (
-    <Group ref={groupRef}>
-      {mountainTops.map((top, index) => (
-        <Line
-          key={index}
-          points={[0, screenHeight / 2, top.x, top.y, screenWidth, screenHeight /2 ]}
-          stroke="white"
-        />
-      ))}
+    <Group ref={groupRef} y={screenHeight / 3}>
+      <Line
+        points={mountainTops.flatMap((point) => [point.x, point.y])}
+        stroke="white"
+        lineJoin="round"
+      />
+      <Shape
+        sceneFunc={(context, shape) => {
+          context.beginPath();
+          context.beginPath();
+          context.moveTo(0, screenHeight);
+          mountainTops.forEach((top) => context.lineTo(top.x, top.y));
+          context.lineTo(screenWidth, screenHeight);
+          context.closePath();
+          // Fill with the specified color
+          context.fillStrokeShape(shape);
+        }}
+        fill="#311854"
+      />
     </Group>
   );
 };

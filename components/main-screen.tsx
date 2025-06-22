@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Layer, Rect, Text } from 'react-konva';
+import { Layer, Rect, Text, Group } from 'react-konva';
 import {Mountains} from './mountains';
 import Sun from './sun';
 import Ground from './ground/ground';
 import Car from './car'
 import ScrollingText from './scrolling-text/index';
+import CanvasOverlay from './canvas-overlay';
 
 export default function MainScreen({ screenWidth, screenHeight } : { screenWidth: number, screenHeight: number }) {
-
     return (
       <Layer>
         <Rect
@@ -19,13 +19,15 @@ export default function MainScreen({ screenWidth, screenHeight } : { screenWidth
           fillLinearGradientEndPoint={{ x: screenWidth, y: screenHeight }}
           fillLinearGradientColorStops={[0, "#311854", 1, "black"]}
         />
-        {false && (
+        {true && (
           <Mountains screenHeight={screenHeight} screenWidth={screenWidth} />
         )}
-
         <Sun screenHeight={screenHeight} screenWidth={screenWidth} />
+
         <Ground screenHeight={screenHeight} screenWidth={screenWidth} />
         <Car screenHeight={screenHeight} screenWidth={screenWidth} />
+        
+        <CanvasOverlay screenWidth={screenWidth} screenHeight={screenHeight} />
       </Layer>
     );
 }

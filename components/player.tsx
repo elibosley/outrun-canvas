@@ -5,7 +5,7 @@ import { useAudio, useBeforeUnload } from "react-use";
 export const Player: React.FC = () => {
   const [audio, state, controls, audioRef] = useAudio({
     src: "/music/Synthwave_E.mp3",
-    autoPlay: true,
+    autoPlay: false,
   });
   return (
     <div className="w-full bg-gray-900 bg-opacity-20 z-50 flex">
