@@ -51,6 +51,15 @@ export default function CanvasOverlay({ screenWidth, screenHeight }: CanvasOverl
     window.open(url, '_blank');
   };
 
+  // Handle touch events for mobile music button
+  const handleMusicTouchStart = () => {
+    // Provide visual feedback on touch
+  };
+
+  const handleMusicTap = () => {
+    handlePlayPause();
+  };
+
   // Responsive layout logic
   const isNarrowScreen = screenWidth < 900;
   const buttonWidth = isNarrowScreen ? 200 : 220;
@@ -70,6 +79,8 @@ export default function CanvasOverlay({ screenWidth, screenHeight }: CanvasOverl
           height={60}
           fill="rgba(17, 24, 39, 0.2)"
           onClick={handlePlayPause}
+          onTouchStart={handleMusicTouchStart}
+          onTap={handleMusicTap}
         />
         <Text
           x={20}
@@ -80,6 +91,8 @@ export default function CanvasOverlay({ screenWidth, screenHeight }: CanvasOverl
           fontFamily="Arial"
           letterSpacing={2}
           onClick={handlePlayPause}
+          onTouchStart={handleMusicTouchStart}
+          onTap={handleMusicTap}
         />
       </Group>
 

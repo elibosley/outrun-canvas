@@ -35,6 +35,19 @@ export default function OutrunButton({
   onMouseLeave,
   onClick 
 }: OutrunButtonProps) {
+  // Handle touch events for mobile
+  const handleTouchStart = () => {
+    onMouseEnter(); // Simulate hover on touch
+  };
+
+  const handleTouchEnd = () => {
+    onMouseLeave(); // Remove hover on touch end
+  };
+
+  const handleTap = () => {
+    onClick(); // Handle tap as click
+  };
+
   return (
     <Group>
       {/* Outer Rectangle */}
@@ -53,6 +66,9 @@ export default function OutrunButton({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={onClick}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTap={handleTap}
       />
       {/* Inner Rectangle */}
       <Rect
@@ -65,6 +81,9 @@ export default function OutrunButton({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={onClick}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTap={handleTap}
       />
       {/* Text */}
       <Text
@@ -84,6 +103,9 @@ export default function OutrunButton({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={onClick}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTap={handleTap}
       />
     </Group>
   );
