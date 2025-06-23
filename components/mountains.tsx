@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Layer, Rect, Text, Line, Group, Shape } from "react-konva";
+import { Line, Group, Shape } from "react-konva";
 import { Group as GroupType } from "konva/lib/Group";
-import { useEffectOnce } from "react-use";
 
 export const Mountains: React.FC<{
   screenWidth: number;
@@ -48,25 +47,7 @@ export const Mountains: React.FC<{
     setMountainTops(initialMountainTops);
   }, [screenHeight, screenWidth]);
 
-  /* useEffect(() => {
-    const animate = () => {
-      setMountainTops((prevMountainTops) => {
-        return prevMountainTops.map((top) => {
-          return {
-            x:
-              top.x +
-              calculateShorteningFactor(Math.abs(top.x - screenWidth / 2)), // Move horizontally randomly
-            y:
-              top.y +
-              calculateShorteningFactor(Math.abs(top.y - screenWidth / 2)), // Move vertically randomly
-          };
-        });
-      });
 
-      requestAnimationFrame(animate);
-    };
-    animate();
-  }, []);  */
 
   return (
     <Group ref={groupRef} y={screenHeight / 3}>

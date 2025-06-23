@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Layer, Rect, Text, Line, Group, Circle } from "react-konva";
-import { TABLET } from "../../helpers/types";
+import React from "react";
+import { Rect, Group } from "react-konva";
 import HorizontalGridLines from "./hlines";
 import VerticalGridLines from "./vlines";
+
 export default function Ground({
   screenWidth,
   screenHeight,
@@ -10,7 +10,6 @@ export default function Ground({
   screenWidth: number;
   screenHeight: number;
 }) {
-  //const [generatedHLines, setGeneratedHLines] = useState([]);
   const x = screenWidth / 2;
   const y = (screenHeight / 3) * 2;
 

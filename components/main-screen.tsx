@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Layer, Rect, Text, Group } from 'react-konva';
+import React from 'react';
+import { Layer, Rect } from 'react-konva';
 import {Mountains} from './mountains';
 import Sun from './sun';
 import Ground from './ground/ground';

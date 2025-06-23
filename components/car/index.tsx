@@ -157,16 +157,7 @@ const Car: React.FC<{
       />
       
 
-      
-      {/* Car trail */}
-      {/* <CarTrail
-        positionHistory={positionHistory}
-        imageWidth={imageWidth}
-        imageHeight={imageHeight}
-        carY={carY}
-        screenHeight={screenHeight}
-        screenWidth={screenWidth}
-      /> */}
+
       
       {/* Main car */}
       <Image
