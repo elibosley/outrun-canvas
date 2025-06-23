@@ -3,9 +3,7 @@ import { Image } from "react-konva";
 import useImage from "use-image";
 import { Image as ImageType } from "konva/lib/shapes/Image";
 import { Animation } from "konva/lib/Animation";
-import Konva from "konva";
-import { CarImage } from "./carImage";
-import { CarTrail } from "./carTrail";
+import { CarShadow } from "./carShadow";
 
 interface CarPosition {
   x: number;
@@ -18,6 +16,10 @@ const Car: React.FC<{
   screenWidth: number;
   screenHeight: number;
 }> = ({ screenWidth, screenHeight }) => {
+  // Sun position for shadow calculation
+  const sunX = screenWidth / 2;
+  const sunRadius = screenWidth < 500 ? screenWidth / 3 : screenWidth / 4;
+  const sunY = (screenHeight / 3) * 2 - sunRadius * 0.6;
   const imageRef = useRef<ImageType>(null);
   const [image] = useImage("/car.svg");
   
@@ -27,6 +29,8 @@ const Car: React.FC<{
   
   // State for trail rendering - update less frequently
   const [positionHistory, setPositionHistory] = useState<CarPosition[]>([]);
+  const [currentOffsetX, setCurrentOffsetX] = useState(0);
+  const [currentScale, setCurrentScale] = useState(0.9);
   const [, forceUpdate] = useState(0);
 
   const getMoveIncrement = useCallback((screenWidth: number) => {
@@ -103,8 +107,10 @@ const Car: React.FC<{
             }
             x = x + carMoveIncrement * addSubtract;
             imageRef.current.offsetX(x);
+            setCurrentOffsetX(x); // Update state for effects
             const scale = Math.sin(frame.time / 1000) * 0.1 + 0.9;
             imageRef.current.scale({ x: scale, y: scale });
+            setCurrentScale(scale); // Update state for effects
 
             // Update trail positions in ref (no React re-render)
             if (trailUpdateTime > trailUpdateInterval) {
@@ -136,6 +142,22 @@ const Car: React.FC<{
 
   return (
     <>
+      {/* Car shadow (render first so it appears behind everything) */}
+      <CarShadow
+        carX={startX}
+        carY={carY}
+        carOffsetX={currentOffsetX}
+        carScale={currentScale}
+        imageWidth={imageWidth}
+        imageHeight={imageHeight}
+        sunX={sunX}
+        sunY={sunY}
+        screenWidth={screenWidth}
+        screenHeight={screenHeight}
+      />
+      
+
+      
       {/* Car trail */}
       {/* <CarTrail
         positionHistory={positionHistory}
